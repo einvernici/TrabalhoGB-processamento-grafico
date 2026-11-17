@@ -30,6 +30,10 @@ subtrator = cv2.createBackgroundSubtractorMOG2(
 gravador = None
 serie = []
 
+mostrar = True
+escala = 2
+espera_ms = 1
+
 for i in range(1, total + 1):
     frame = cv2.imread(
         str(base / "input" / f"in{i:06d}.jpg")
@@ -97,6 +101,16 @@ for i in range(1, total + 1):
             raise RuntimeError("Não foi possível criar o vídeo")
 
     gravador.write(frame)
+
+    if mostrar:
+        cv2.imshow("Adaptativo - deteccao de movimento", cv2.resize(frame, None, fx=escala, fy=escala))
+        cv2.imshow("Adaptativo - mascara", cv2.resize(movimento, None, fx=escala, fy=escala))
+
+        if cv2.waitKey(espera_ms) & 0xFF == ord("q"):
+            mostrar = False
+            cv2.destroyAllWindows()
+
+cv2.destroyAllWindows()
 
 # Liberação dos recursos
 if gravador is not None:
