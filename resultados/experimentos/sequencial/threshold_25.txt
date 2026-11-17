@@ -6,4 +6,4 @@ Resultados quantitativos (frames 470-1700):
   Recall   = 0.486
   F1       = 0.621
 
-Tempo de processamento: 0.50 ms/frame
+Tempo de processamento: 0.40 ms/frame

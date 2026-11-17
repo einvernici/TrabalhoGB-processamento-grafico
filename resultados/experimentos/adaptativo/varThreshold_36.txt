@@ -1,0 +1,9 @@
+Investigação - método de fundo adaptativo (MOG2)
+Parâmetros: history=500, varThreshold=36, detectShadows=False
+
+Resultados quantitativos (frames 470-1700):
+  Precisão = 0.899
+  Recall   = 0.851
+  F1       = 0.874
+
+Tempo de processamento: 1.70 ms/frame

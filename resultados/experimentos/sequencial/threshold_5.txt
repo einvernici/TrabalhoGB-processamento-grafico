@@ -1,0 +1,9 @@
+Investigação - método sequencial (diferença de frames)
+Parâmetros: limiar=5
+
+Resultados quantitativos (frames 470-1700):
+  Precisão = 0.760
+  Recall   = 0.946
+  F1       = 0.843
+
+Tempo de processamento: 0.44 ms/frame
