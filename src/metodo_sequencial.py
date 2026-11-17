@@ -8,16 +8,13 @@ base = Path("assets/highway")
 saida = Path("resultados") / "sequencial"
 saida.mkdir(parents=True, exist_ok=True)
 
-# Parâmetro selecionado nos experimentos
 limiar = 5
 
-# Quantidade de frames
 total = len(list((base / "input").glob("in*.jpg")))
 
 if total == 0:
     raise FileNotFoundError("Nenhum frame encontrado na pasta input")
 
-# Variáveis de processamento
 frame_anterior = None
 gravador = None
 serie = []
@@ -30,16 +27,13 @@ for i in range(1, total + 1):
     if frame is None:
         raise FileNotFoundError(f"Não foi possível abrir o frame {i}")
 
-    # 1. Pré-processamento
     atual = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     atual = cv2.GaussianBlur(atual, (5, 5), 0)
 
-    # O primeiro frame serve apenas como referência
     if frame_anterior is None:
         frame_anterior = atual
         continue
 
-    # 2. Diferença entre frames consecutivos
     diferenca = cv2.absdiff(frame_anterior, atual)
 
     _, movimento = cv2.threshold(
@@ -49,11 +43,9 @@ for i in range(1, total + 1):
         cv2.THRESH_BINARY
     )
 
-    # 3. Pós-processamento
     movimento = cv2.medianBlur(movimento, 5)
     movimento = cv2.dilate(movimento, None, iterations=2)
 
-    # 4. Detecção de regiões
     contornos, _ = cv2.findContours(
         movimento,
         cv2.RETR_EXTERNAL,
@@ -78,16 +70,12 @@ for i in range(1, total + 1):
 
         quantidade += 1
 
-    # 5. Área total de foreground
     area = np.count_nonzero(movimento)
 
-    # 6. Atualização da referência temporal
     frame_anterior = atual
 
-    # 7. Registro dos dados por frame
     serie.append((i, quantidade, area))
 
-    # 8. Gravação do vídeo anotado
     if gravador is None:
         altura_video, largura_video = frame.shape[:2]
         codec = cv2.VideoWriter_fourcc(*"MJPG")
@@ -105,11 +93,9 @@ for i in range(1, total + 1):
 
     gravador.write(frame)
 
-# Liberação dos recursos
 if gravador is not None:
     gravador.release()
 
-# 9. Exportação da série temporal
 arquivo_csv = saida / "diferenca_serie.csv"
 
 with open(arquivo_csv, "w", encoding="utf-8") as arquivo:
